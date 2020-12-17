@@ -28,6 +28,9 @@ use Yii;
  * @property int $recommend
  * @property string $essay
  * @property string $r_date
+ * @property string $sigfilename
+ * @property string $signature
+ * @property string $rstl_id
  */
 class Csf extends \yii\db\ActiveRecord
 {
@@ -53,11 +56,12 @@ class Csf extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'ref_num', 'nob', 'tom', 'service', 'd_deliverytime', 'd_accuracy',  'd_speed', 'd_cost','d_attitude', 'd_overall','i_deliverytime',  'i_accuracy', 'i_speed', 'i_cost', 'i_attitude',  'i_overall', 'recommend'], 'required'],
-            [['d_deliverytime', 'd_accuracy', 'd_speed', 'd_cost', 'd_attitude', 'd_overall', 'i_deliverytime', 'i_accuracy', 'i_speed', 'i_cost', 'i_attitude', 'i_overall', 'recommend'], 'integer'],
+            [['name', 'ref_num', 'nob', 'tom', 'service', 'd_deliverytime', 'd_accuracy',  'd_speed', 'd_cost','d_attitude', 'd_overall','i_deliverytime',  'i_accuracy', 'i_speed', 'i_cost', 'i_attitude',  'i_overall', 'recommend','signature'], 'required'],
+            [['d_deliverytime', 'd_accuracy', 'd_speed', 'd_cost', 'd_attitude', 'd_overall', 'i_deliverytime', 'i_accuracy', 'i_speed', 'i_cost', 'i_attitude', 'i_overall', 'recommend','rstl_id'], 'integer'],
             [['r_date'], 'safe'],
             [['name', 'essay', 'ref_num'], 'string', 'max' => 500],
             [['nob', 'tom', 'service'], 'string', 'max' => 200],
+            [['sigfilename'], 'string', 'max' => 100],
         ];
     }
 
@@ -88,6 +92,9 @@ class Csf extends \yii\db\ActiveRecord
             'recommend' => 'Recommend',
             'essay' => 'Essay',
             'r_date' => 'R Date',
+            'sigfilename' => 'Signature Filename',
+            'signature' => 'Signature',
+            'rstl_id'=>'RSTL ID'
         ];
     }
 
