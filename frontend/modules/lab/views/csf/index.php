@@ -20,11 +20,11 @@ use kartik\widgets\DepDrop;
 
 
 <div class="row">
-<div class="col-sm-1">
+<div class="col-sm-2">
 <img src='/uploads/dost.svg' style=' width: 90; height: 120px;margin-left:60px;margin-top:20px' /> 
 </div>
 
-<div class="col-sm-11" >
+<div class="col-sm-10" >
 <h3 style="color:#1a4c8f;font-family:verdana;font-size:150%;, 
       7px 7px 0px rgba(0, 0, 0, 0.2);"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department of Science and Technology</b></h3>
 <h3 style="color:#142142;font-family:verdana;font-size:150%;, 

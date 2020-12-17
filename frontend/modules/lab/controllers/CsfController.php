@@ -43,7 +43,20 @@ class CsfController extends Controller
     {
         $model = new Csf();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      //  if ($model->load(Yii::$app->request->post()) && $model->save()) 
+    //    {
+            if ($model->load(Yii::$app->request->post())) { 
+                // var_dump($model->signature);exit;   
+               //  define('UPLOAD_DIR', 'images/signature');
+                 $base64_string = $model->signature;//$_POST['Feedback']['signature'];
+                  $data = explode(',', $base64_string);
+                  $file = 'images/signature/' . $model->name . '.png';
+                  file_put_contents($file, base64_decode($data[1]));
+                  $model->sigfilename =  $model->name . '_' . substr(md5(mt_rand()), 0, 7) .'.png';
+                  $model->rstl_id = 11;
+                  $model->save();
+                 // $model->signature = $file;
+ 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -204,7 +217,19 @@ class CsfController extends Controller
     {
         $model = new Csf();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+      // if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+           if ($model->load(Yii::$app->request->post())) { 
+               // var_dump($model->signature);exit;   
+              //  define('UPLOAD_DIR', 'images/signature');
+                $base64_string = $model->signature;//$_POST['Feedback']['signature'];
+                 $data = explode(',', $base64_string);
+                 $file = 'images/signature/' . $model->name . '.png';
+                 file_put_contents($file, base64_decode($data[1]));
+                 $model->sigfilename =  $model->name . '.png';
+                 $model->save();
+                // $model->signature = $file;
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -295,6 +320,14 @@ class CsfController extends Controller
   public function actionPrintmonthly(){
     $Printing=new Printing();
     $Printing->PrintReportmonthly(20);
+}
+
+public function actionPrintcsfmonthly(){
+    $imonth=0;
+    $pMonth = Yii::$app->request->get('csfmonth');
+    $iyear = date("Y"); 
+    $Printing=new Printing();
+    $Printing->Printcsfmonthly($pMonth,$iyear);
 }
 
 public function actionPrintcustomer(){

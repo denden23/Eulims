@@ -14,6 +14,7 @@ use common\models\lab\Analysis;
 use common\models\lab\LabManager;
 use common\models\finance\Paymentitem;
 use common\models\finance\Receipt;
+use common\models\lab\Csf;
 /**
  * Description of RequestPrinting
  *
@@ -1039,6 +1040,351 @@ class Printing {
     $mPDF->render();
     exit;
 }
+
+public function Printcsfmonthly($imonth,$iyear) {
+      
+  $csfrecs = Csf::find()->andWhere('Month(r_date) = ' . $imonth)->andWhere('Year(r_date) =' . $iyear)->all();
+ //  $csf = Csf::find()->andWhere('Month(r_date) =' .  $pMonth)->andWhere('Year(r_date) = 2020')->all();
+       
+   \Yii::$app->view->registerJsFile("css/day.css");
+   
+   $nobvalue = 0;
+   
+////    switch (strtolower()) {
+////    case "red":
+////        echo "Your favorite color is red!";
+////        break;
+////    case "blue":
+////        echo "Your favorite color is blue!";
+////        break;
+////    case "green":
+////        echo "Your favorite color is green!";
+////        break;
+////    default:
+////        echo "Your favorite color is neither red, blue, nor green!";
+//}
+ 
+   $mPDF = new Pdf(['cssFile' => 'css/day.css']);
+   
+   $csiall = '';
+   
+   foreach($csfrecs as $csfrec)
+   {
+   $csi = ' <link href="/assets/2e013e19/css/bootstrap.css" rel="stylesheet">
+       <body>
+   <div class="header">
+     <h4>Department of Science and Technology</h4>
+     <h4>REGIONAL STANDARDS AND TESTING LABORATORIES</h4>
+     <p>Pettit barracks, Zamboanga City</p>
+     <p>TEl. No. (63) (62) 991-1024; Fax No. (63) (62) 992-1114</p>
+   </div>
+   <div class="content">
+     <h4 style="text-align:center">Customer Satisfaction Feedback Survey</h4>
+     <br />
+      
+ 
+     <h2>I. Information</h2>
+     <table style="width:100%">
+       <tbody>
+         <tr>
+           <td>
+             Customer Name: <strong>' . $csfrec->name . '</strong>
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Date :  <strong>'  . date("jS F, Y", strtotime($csfrec->r_date)) . '</strong>
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Request Reference Number : <strong>'  . $csfrec->ref_num . '</strong></div>
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Nature of Business:
+             <table style="width:100%;margin:10px">
+               <tr>
+                   <td style="width:34%">
+                       <div' . (strtolower($csfrec->nob) == strtolower('Raw and Processed Food') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Raw and Processed Food') ?' checked="checked"':'') .  '> Raw and Processed Food</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Marine products') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Marine products') ?' checked="checked"':'') .  '> Marine products</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Canned / Bottled Fish') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Canned / Bottled Fish') ?' checked="checked"':'') .  '> Canned / Bottled Fish</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Fishmeal') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Fishmeal') ?' checked="checked"':'') .  '> Fishmeal</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Seaweeds') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Seaweeds') ?' checked="checked"':'') .  '> Seaweeds</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Petroleum Products / Haulers') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Petroleum Products / Haulers') ?' checked="checked"':'') .  '> Petroleum Products / Haulers</div>
+                     
+                   </td >
+                   <td style="width:33%">
+                       <div' . (strtolower($csfrec->nob) == strtolower('Mining') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Mining') ?' checked="checked"':'') .  '> Mining</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Hospitals') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Hospitals') ?' checked="checked"':'') .  '> Hospitals</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Academe / Students') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Academe / Students') ?' checked="checked"':'') .  '> Academe / Students</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Beverage and juices') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Beverage and juices') ?' checked="checked"':'') .  '> Beverage and juices</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Government / LGUs') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Government / LGUs') ?' checked="checked"':'') .  '> Government / LGUs</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Construction') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Construction') ?' checked="checked"':'') .  '> Construction</div>
+                     
+                   </td>
+                   <td style="width:33%">
+                       <div' . (strtolower($csfrec->nob) == strtolower('Water Refilling / Bottled Water') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Water Refilling / Bottled Water') ?' checked="checked"':'') .  '> Water Refilling / Bottled Water</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Others') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Others') ?' checked="checked"':'') .  '> Others</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Students') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Students') ?' checked="checked"':'') .  '> Students</div>
+                       <div' . (strtolower($csfrec->nob) == strtolower('Private Individual') ?' style="font-weight:bold;color:#1c1cf0"':'') . '><input type="checkbox" name=""'  .  (strtolower($csfrec->nob) == strtolower('Private Individual') ?' checked="checked"':'') .  '> Private Individual</div>
+                      
+                   </td>
+               </tr>
+             </table>
+
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Type of Market:
+            <table style="width:100%;margin:10px">
+               <tr>
+                   <td ' . ( $csfrec->tom == 1  ?'  style="width:34%;background-color:#fd5e53"':'style="width:34%"') . '>
+                   <div><input type="checkbox" name=""'.( $csfrec->tom == 1  ?' checked="checked"':'').'> Local</div>
+                   </td>
+                   <td ' . ( $csfrec->tom == 2  ?'  style="width:34%;background-color:#77dd77"':'style="width:33%"') . '>
+                   <div><input type="checkbox" name=""'.( $csfrec->tom == 2  ?' checked="checked"':'').'> Export</div>
+                   </td>
+                   <td ' . ( $csfrec->tom == 3  ?'  style="width:34%;background-color:#7cb9e8"':'style="width:33%"') . '>
+                   <div><input type="checkbox" name=""'.( $csfrec->tom == 3  ?' checked="checked"':'').'> Both</div>
+                   </td>
+               </tr>
+             </table>
+           </td>
+         </tr>
+         <tr>
+           <td>
+             What services of the RSTL have you availed?
+             <table style="width:100%;margin:10px">
+               <tr>
+                   <td ' . ( $csfrec->service == 1  ?'  style="width:34%;background-color:#fd5e53"':'style="width:34%"') . '>
+                   <div><input type="checkbox" name=""'.( $csfrec->service == 1  ?' checked="checked"':'').'> Chemical Testing</div>
+                   </td>
+                   <td ' . ( $csfrec->service == 2  ?'  style="width:34%;background-color:#77dd77"':'style="width:33%"') . '>
+                   <div><input type="checkbox" name=""'.( $csfrec->service == 2  ?' checked="checked"':'').'> Microbiological Testing</div>
+                   </td>
+                   <td ' . ( $csfrec->service == 3  ?'  style="width:34%;background-color:#7cb9e8"':'style="width:33%"') . '>
+                   <div><input type="checkbox" name=""'.( $csfrec->service == 3  ?' checked="checked"':'').'> Calibration</div>
+                   </td>
+               </tr>
+           </table>
+           </td>
+         </tr>
+       </tbody>
+     </table>
+     <br />
+ 
+     <h2>II. Delivery of Service</h2>
+     <table class="custom-table">
+       <thead>
+         <tr>
+           <th>Service Quality Items</th>
+           <th>Very Satisfied <br>(5)</th>
+           <th>Quite Satisfied <br>(4)</th>
+           <th>Neither satisfied nor Dissatisfied <br>(3)</th>
+           <th>Quite Dissatisfied <br>(2)</th>
+           <th>Very Dissatisfied <br>(1)</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+           <td>Delivery Time</td>
+           <td' .( $csfrec->d_deliverytime == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->d_deliverytime == 5  ?'  checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->d_deliverytime == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->d_deliverytime == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->d_deliverytime == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->d_deliverytime == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->d_deliverytime == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->d_deliverytime == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->d_deliverytime == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->d_deliverytime == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Correctness and accuracy of test results</td>
+           <td' .( $csfrec->d_accuracy == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->d_accuracy == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->d_accuracy == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->d_accuracy == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->d_accuracy == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->d_accuracy == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->d_accuracy == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->d_accuracy == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->d_accuracy == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->d_accuracy == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Speed of service</td>
+           <td' .( $csfrec->d_speed == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->d_speed == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->d_speed == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->d_speed == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->d_speed == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->d_speed == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->d_speed == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->d_speed == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->d_speed == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->d_speed == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Cost</td>
+           <td' .( $csfrec->d_cost == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->d_cost == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->d_cost == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->d_cost == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->d_cost == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->d_cost == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->d_cost == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->d_cost == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->d_cost == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->d_cost == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Attitude of staff</td>
+           <td' .( $csfrec->d_attitude == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->d_attitude == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->d_attitude == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->d_attitude == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->d_attitude == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->d_attitude == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->d_attitude == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->d_attitude == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->d_attitude == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->d_attitude == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Over-all customer experience</td>
+           <td' .( $csfrec->d_overall == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->d_overall == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->d_overall == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->d_overall == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->d_overall == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->d_overall == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->d_overall == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->d_overall == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->d_overall == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->d_overall == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+       </tbody>
+     </table>
+     <br />
+ <br /><br /><br /><br /><br /><br /><br /><br />
+     <h2>III. How <span>important</span> are these items to you?</h2>
+     <table class="custom-table">
+       <thead>
+         <tr>
+           <th>Service Quality Items</th>
+           <th>Very important <br>(5)</th>
+           <th>Quite important <br>(4)</th>
+           <th>Neither important nor unimportant <br>(3)</th>
+           <th>Quite unimportant <br>(2)</th>
+           <th>Not at all important <br>(1)</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+           <td>Delivery Time</td>
+           <td' .( $csfrec->i_deliverytime == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->i_deliverytime == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->i_deliverytime == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->i_deliverytime == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->i_deliverytime == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->i_deliverytime == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->i_deliverytime == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->i_deliverytime == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->i_deliverytime == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->i_deliverytime == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Correctness and accuracy of test results</td>
+           <td' .( $csfrec->i_accuracy == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->i_accuracy == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->i_accuracy == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->i_accuracy == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->i_accuracy == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->i_accuracy == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->i_accuracy == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->i_accuracy == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->i_accuracy == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->i_accuracy == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Speed of service</td>
+           <td' .( $csfrec->i_speed == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->i_speed == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->i_speed == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->i_speed == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->i_speed == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->i_speed == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->i_speed == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->i_speed == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->i_speed == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->i_speed == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Cost</td>
+           <td' .( $csfrec->i_cost == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->i_cost == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->i_cost == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->i_cost == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->i_cost == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->i_cost == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->i_cost == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->i_cost == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->i_cost == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->i_cost == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Attitude of staff</td>
+           <td' .( $csfrec->i_attitude == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->i_attitude == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->i_attitude == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->i_attitude == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->i_attitude == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->i_attitude == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->i_attitude == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->i_attitude == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->i_attitude == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->i_attitude == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+         <tr>
+           <td>Over-all customer experience</td>
+           <td' .( $csfrec->i_overall == 5  ?'  style="background-color:#3cb371"':'') . '><input type="checkbox" name=""'.( $csfrec->i_overall == 5  ?' checked="checked"':'').'></td><!-- 5 -->
+           <td' .( $csfrec->i_overall == 4  ?'  style="background-color:#98fb98"':'') . '><input type="checkbox" name=""'.( $csfrec->i_overall == 4  ?' checked="checked"':'').'></td><!-- 4 -->
+           <td' .( $csfrec->i_overall == 3  ?'  style="background-color:#f5deb3"':'') . '><input type="checkbox" name=""'.( $csfrec->i_overall == 3  ?' checked="checked"':'').'></td><!-- 3 -->
+           <td' .( $csfrec->i_overall == 2  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name=""'.( $csfrec->i_overall == 2  ?' checked="checked"':'').'></td><!-- 2 -->
+           <td' .( $csfrec->i_overall == 1  ?'  style="background-color:#dc143c"':'') . '><input type="checkbox" name=""'.( $csfrec->i_overall == 1  ?' checked="checked"':'').'></td><!-- 1 -->
+         </tr>
+       </tbody>
+     </table>
+     <br />
+ 
+     <h2>IV. How likely is it that you would <span>recommend</span> our service to others?</h2>
+     <table style="table-layout: fixed;width:100%" class="thtd-center">
+       <thead>
+         <tr>
+           <th>0<br /><span style="font-size: smaller;">Not at all likely</span></th>
+           <th>1</th>
+           <th>2</th>
+           <th>3</th>
+           <th>4</th>
+           <th>5</th>
+           <th>6</th>
+           <th>7</th>
+           <th>8</th>
+           <th>9</th>
+           <th>10<br /><span style="font-size: smaller;">Extremely likely</span></th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+         <td' .( $csfrec->recommend == 0  ?'  style="background-color:#cd5c5c"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 0  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 1  ?'  style="background-color:#cd5c5c"':'') . '><input type="checkbox" name=""'.( $csfrec->recommend == 1  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 2  ?'  style="background-color:#cd5c5c"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 2  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 3  ?'  style="background-color:#cd5c5c"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 3  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 4  ?'  style="background-color:#e9967a"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 4  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 5  ?'  style="background-color:#ffa07a"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 5  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 6  ?'  style="background-color:#ffefd5"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 6  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 7  ?'  style="background-color:#cd5c5c"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 7  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 8  ?'  style="background-color:#32cd32"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 8  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 9  ?'  style="background-color:#008000"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 9  ?' checked="checked"':'').'></td>
+           <td' .( $csfrec->recommend == 10  ?'  style="background-color:#006400"':'') . '><input type="checkbox" name="" '.( $csfrec->recommend == 10  ?' checked="checked"':'').'></td>
+           
+         </tr>
+       </tbody>
+     </table>
+     <br />
+ 
+     <h2>V. Please give us your comments/suggestions to improve our services. Also, let us know other tests you require that we are not able to provide yet.</h2>
+     <br>
+     <pre ><u>' . ( trim($csfrec->essay) <> ''  ? $csfrec->essay:'No given feedback.') .  '</u></pre>
+   </div>
+   <div class="footer">
+     <div class="checkbox" style="margin: 30px 0;max-height:430px;height:430px">
+       <div style="flex: 1; display: flex;">' .
+       // ( trim($csfrec->essay) <> ''  ? 'Feedback given by : ':'') .  
+          
+//          '<div style="
+//            flex: 1;
+//            border-bottom: 1px solid #000;
+//            margin: 0 10px 0 5px;
+//            padding: 0 2px;
+//          ">
+          
+         '</div>
+       </div>
+      
+     </div>
+   </div>
+  
+ </body>';
+   
+   $csiall = $csiall .$csi;
+  }
+   
+   
+   
+   $mPDF->content = $csiall;
+   $mPDF->orientation = Pdf::ORIENT_PORTRAIT;
+ //  $mPDF->defaultFontSize = 80;
+ //  $mPDF->defaultFont = 'Arial';
+   $mPDF->format =Pdf::FORMAT_A4;
+   $mPDF->destination = Pdf::DEST_BROWSER;
+  
+   //$mPDF->cssFile = 'assets/2e013e19/css/bootstrap.css';
+ //  $mPDF->methods =['SetFooter'=>['|{PAGENO}|']];
+   $mPDF->render();
+   
+   exit;
+}
+
 
     private function FastReport($id){
         $Func = new Functions();

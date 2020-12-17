@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-
+//echo $pMonth;
 ?>
 <!DOCTYPE html>
 <html>
@@ -106,12 +106,12 @@ use yii\helpers\Html;
               <table class="table top">
                 <tbody>
                   <tr>
-                    <td>For the period of</td>
-                    <td>: <strong><?php echo $monthName;?></strong></td>
+                    <td >For the period of : 
+                    <strong style="font-size:20px"><?php echo $monthName;?></strong></td>
                   </tr>
                   <tr>
-                    <td>Total no. of Respondents</td>
-                    <td>: <strong id="respondents"><?php  echo $count?></strong></td>
+                    <td>Total no. of Respondents
+                    : <a style="font-size:22px" href="/lab/csf/printcsfmonthly?csfmonth=<?php  echo $pMonth?>" title="Print All CSF(s)">  <strong id="respondents"><?php  echo $count?></a></strong></td>
                   </tr>
                 </tbody>
               </table>
