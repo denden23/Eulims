@@ -1068,8 +1068,11 @@ public function Printcsfmonthly($imonth,$iyear) {
    
    $csiall = '';
    
+  // var_dump($csfrecs);exit;
    foreach($csfrecs as $csfrec)
    {
+   
+    
    $csi = ' <link href="/assets/2e013e19/css/bootstrap.css" rel="stylesheet">
        <body>
    <div class="header">
@@ -1345,7 +1348,11 @@ public function Printcsfmonthly($imonth,$iyear) {
      <h2>V. Please give us your comments/suggestions to improve our services. Also, let us know other tests you require that we are not able to provide yet.</h2>
      <br>
      <pre ><u>' . ( trim($csfrec->essay) <> ''  ? $csfrec->essay:'No given feedback.') .  '</u></pre>
+    
+     
+
    </div>
+   Customer Signature : <div style="text-align:left"><img width="194px" height="49px" src="images/signature/' . $csfrec->sigfilename . '"></img></div>
    <div class="footer">
      <div class="checkbox" style="margin: 30px 0;max-height:430px;height:430px">
        <div style="flex: 1; display: flex;">' .

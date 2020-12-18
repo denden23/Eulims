@@ -46,15 +46,16 @@ class CsfController extends Controller
       //  if ($model->load(Yii::$app->request->post()) && $model->save()) 
     //    {
             if ($model->load(Yii::$app->request->post())) { 
-                $strFilename = substr(md5(mt_rand()), 0, 7);
+                $strFilename = substr(md5(mt_rand()), 0, 10);
                 // var_dump($model->signature);exit;   
                //  define('UPLOAD_DIR', 'images/signature');
                  $base64_string = $model->signature;//$_POST['Feedback']['signature'];
                   $data = explode(',', $base64_string);
-                  $file = $path = $_SERVER['DOCUMENT_ROOT']. '/images/signature/' . $model->name . '_' . $strFilename .'.png';
+                  $file = $path = $_SERVER['DOCUMENT_ROOT']. '/images/signature/' . $strFilename .'.png';
                   file_put_contents($file, base64_decode($data[1]));
-                  $model->sigfilename =  $model->name . '_' . $strFilename .'.png';
+                  $model->sigfilename =  $strFilename .'.png';
                   $model->rstl_id = 11;
+                  
                   $model->save();
                  // $model->signature = $file;
  
