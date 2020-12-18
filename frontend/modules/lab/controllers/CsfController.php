@@ -51,7 +51,7 @@ class CsfController extends Controller
                //  define('UPLOAD_DIR', 'images/signature');
                  $base64_string = $model->signature;//$_POST['Feedback']['signature'];
                   $data = explode(',', $base64_string);
-                  $file = $path = $_SERVER['DOCUMENT_ROOT']. '/uploads/signature/' . $model->name . '_' . $strFilename .'.png';
+                  $file = $path = $_SERVER['DOCUMENT_ROOT']. '/images/signature/' . $model->name . '_' . $strFilename .'.png';
                   file_put_contents($file, base64_decode($data[1]));
                   $model->sigfilename =  $model->name . '_' . $strFilename .'.png';
                   $model->rstl_id = 11;
