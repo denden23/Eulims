@@ -361,42 +361,65 @@ class RestcustomerController extends \yii\rest\Controller
     }
 
     public function actionMailcode($email){
+
         //sends a code to a customer for account verification purpose
 
         //generate random strings
         $code = \Yii::$app->security->generateRandomString(5);
         //get the customer profile using the email
         $customer = Customer::find()->where(['email'=>$email])->one();
-
-        if($customer){
+        $accountcustom = Customeraccount::find()->where(['customer_id'=>$customer->customer_id, 'status'=>0])->one();
+        if ($accountcustom){
+            if($customer){
             //check if the customer has an account already
-            $account = Customeraccount::find()->where(['customer_id'=>$customer->customer_id])->one();
-            if($account){
-                //update the verify code
-                $account->verifycode = $code;
-                $account->status=0;
-                $account->save();
-            } else{
-                //create account with the verify code
-                $new = new Customeraccount;
-                $new->customer_id=$customer->customer_id;
-                $new->setPassword('12345');
-                $new->generateAuthKey();
-                $new->verifycode = $code;
-                $new->save();
-            }
+/*                $account = Customeraccount::find()->where(['customer_id'=>$customer->customer_id])->one();
+                if($account){
+                    //update the verify code
+                    $account->verifycode = $code;
+                    $account->status=0;
+                    $account->save();
+                } else{
+                    //create account with the verify code
+                    $new = new Customeraccount;
+                    $new->customer_id=$customer->customer_id;
+                    $new->setPassword('12345');
+                    $new->generateAuthKey();
+                    $new->verifycode = $code;
+                    $new->save();
+                }*/
+                    $new = new Customeraccount;
+                    $new->customer_id=$customer->customer_id;
+                    $new->setPassword('12345');
+                    $new->generateAuthKey();
+                    $new->verifycode = $code;
+                    $new->save();
             //contruct the html content to be mailed to the customer
             $content ="
             <h1>Good day! $customer->customer_name</h1>
 
-            <h3>Account code : $code</h3>
-            <p>Thank you for choosing the Onelab, to be able to provide a quality service to our beloved customer, we are giving this account code above which you may use to activate your account if ever you want to use the mobile app version, below are the following features that you may found useful. Available for Android and Apple smart devices. </p>
+            <h2>Account code : $code</h2>
+            <p>Thank you for choosing the Onelab, to be able to provide a quality service to our beloved customer, we are giving this account code above which you may use to activate your account if ever you want to use the mobile app version, below are the following features that you may found useful. Available for Android smart devices.</p>
+            
+            <p><h3>Download the app by visiting the link below.<h3><br>
+            https://play.google.com/store/apps/details?id=com.dostonelab.customer
+            </p>
 
-            <ul>Features
+            <ul><b>Here are the following steps to register using the Mobile App:</b>
+                <li>Copy the Account code above</li>
+                <li>Downlad and open the OneLab Customer Mobile</li>
+                <li>Click Register</li>
+                <li>Paste the Account code in the Verification code text box</li>
+                <li>Set your password. It mas be atleast 6 characters</li>
+                <li>Agree on the Terms and condition.</li>
+                <li>Enjoy using the OneLab Customer Mobile</li>
+            </ul>
+
+            <ul><b>Features</b>
                 <li>Request and Result Tracking</li>
                 <li>Request Transaction History</li>
                 <li>Wallet Transations and History</li>
                 <li>Bookings</li>
+                <li>Sample Quotation</li>
                 <li>User Profile</li>
             </ul>
             <br>
@@ -418,13 +441,20 @@ class RestcustomerController extends \yii\rest\Controller
                 'success' => true,
                 'message' => 'Code successfully sent to customer\'s email',
             ]); 
+            }
+            else{
+                return $this->asJson([
+                    'success' => false,
+                    'message' => 'Email is not a valid customer',
+                ]); 
+                }
         }
         else{
             return $this->asJson([
                 'success' => false,
-                'message' => 'Email is not a valid customer',
+                'message' => 'Email is in active status',
             ]); 
-        }
+            } 
     }
 
     public function actionRegister(){

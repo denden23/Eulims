@@ -40,6 +40,7 @@ use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use common\models\lab\Lab;
 
+
 use common\components\Notification;
 use common\models\inventory\Equipmentservice; //use to check calibration schedule
 use common\models\inventory\InventoryEntries; //use to check expiry of products
@@ -96,6 +97,7 @@ class RequestController extends Controller
      */
     public function actionView($id)
     {
+
         $searchModel = new RequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination->pageSize=10;
@@ -537,6 +539,17 @@ class RequestController extends Controller
             $Func=new Functions();
             $response=$Func->GenerateSampleCode($request_id);
             if($response){
+
+                //query customer using $Request->customer_id
+                $customer = Customer::find()->where(['customer_id'=>$Request->customer_id])->one();
+                $apiUrl=$GLOBALS['newapi_url'].'restcustomer/mailcode?email='.$customer->email;
+                $curl = new curl\Curl();
+                $curl->setOption(CURLOPT_CONNECTTIMEOUT, 180);
+                $curl->setOption(CURLOPT_TIMEOUT, 180);
+                $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
+                $list = Json::decode($curl->get($apiUrl));
+
+
                 $return="Success";
                 Yii::$app->session->setFlash('success', 'Request Reference # and Sample Code Successfully Generated!');
                 $Transaction->commit();
@@ -550,8 +563,9 @@ class RequestController extends Controller
             $Transaction->rollback();
             $return="Failed";
         }
+        
+		//to here
         return $return;
-		
     }
     /**
      * Creates a new Request model.
