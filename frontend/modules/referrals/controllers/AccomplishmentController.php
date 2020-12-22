@@ -1,13 +1,13 @@
 <?php
 
-namespace frontend\modules\reports\controllers;
+namespace frontend\modules\referrals\controllers;
 
 use Yii;
 use yii\web\Controller;
 //use common\models\lab\Sample;
 //use common\models\lab\SampleSearch;
 //use common\models\lab\Request;
-use common\models\referral\Referralextend;
+use frontend\modules\referrals\models\Referralextend;
 use common\models\referral\Lab;
 use common\models\referral\Referral;
 use common\models\referral\Agency;
@@ -22,7 +22,7 @@ use yii2tech\spreadsheet\SerialColumn;
 use arturoliveira\ExcelView;
 use kartik\grid\GridView;
 
-class AccomplishmentcroController extends \yii\web\Controller
+class AccomplishmentController extends \yii\web\Controller
 {
     public function actionIndex()
     {
@@ -197,9 +197,7 @@ class AccomplishmentcroController extends \yii\web\Controller
 				    'DATE_FORMAT(referral_date_time, "%m")' => SORT_ASC,
 				]);
 		} else {
-	
-
-	$modelReferral = Referralextend::find()
+			$modelReferral = Referralextend::find()
 				->where('(testing_agency_id =:testingAgencyId OR receiving_agency_id =:receivingAgencyId) AND cancelled =:cancel AND lab_id = :labId AND DATE_FORMAT(`referral_date_time`, "%Y-%m-%d") BETWEEN :fromRequestDate AND :toRequestDate AND testing_agency_id != 0', [':testingAgencyId'=>$rstlId,':receivingAgencyId'=>$rstlId,':cancel'=>0,':labId'=>$labId,':fromRequestDate'=>$startDate,':toRequestDate'=>$endDate])
 				->groupBy(['DATE_FORMAT(referral_date_time, "%Y-%m")'])
 				//->groupBy(['DATE_FORMAT(referral_date_time, "%m")'])

@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\referrals\models;
+namespace common\models\referral;
 
 use Yii;
 //use common\models\system\Rstl;

@@ -1,20 +1,16 @@
 <?php
 
-namespace frontend\modules\reports\controllers;
+namespace frontend\modules\api\controllers;
 
 use Yii;
 use yii\web\Controller;
-//use common\models\lab\Sample;
-//use common\models\lab\SampleSearch;
-//use common\models\lab\Request;
-use common\models\referral\Referralextend;
+use frontend\modules\referrals\models\Referralextend;
 use common\models\referral\Lab;
 use common\models\referral\Referral;
 use common\models\referral\Agency;
 use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
-//use yii\data\SqlDataProvider;
 use yii\data\ArrayDataProvider;
 use frontend\modules\referrals\template\Accomplishmentreportagency;
 use yii2tech\spreadsheet\Spreadsheet;
@@ -22,8 +18,39 @@ use yii2tech\spreadsheet\SerialColumn;
 use arturoliveira\ExcelView;
 use kartik\grid\GridView;
 
-class AccomplishmentcroController extends \yii\web\Controller
+class RestaccomplishmentController extends \yii\rest\Controller
 {
+	public function behaviors()
+	{
+		$behaviors = parent::behaviors();
+		
+		$behaviors['authenticator'] = [
+			'class' => \sizeg\jwt\JwtHttpBearerAuth::class,
+		];
+		$auth = $behaviors['authenticator'];
+		unset($behaviors['authenticator']);
+		
+		// add CORS filter
+
+		$behaviors['corsFilter'] = [
+			'class' => \common\filters\Cors::className(),
+			'cors'  => [
+				// restrict access to domains:
+				'Origin'                           => ['*'],
+				'Access-Control-Request-Method'    => ['POST', 'GET', 'OPTIONS'],
+				'Access-Control-Allow-Credentials' => true,
+				'Access-Control-Max-Age'           => 3600,                 // Cache (seconds)
+				'Access-Control-Allow-Headers' => ['authorization','X-Requested-With','content-type', 'some_custom_header','Access-Control-Allow-Origin']],
+		];
+		
+		// re-add authentication filter
+		$behaviors['authenticator'] = $auth;
+		// avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
+		$behaviors['authenticator']['except'] = ['options','login', 'server','listLaboratory'];
+
+		return $behaviors;
+	}
+	
     public function actionIndex()
     {
     	$model = new Referralextend;
@@ -92,6 +119,7 @@ class AccomplishmentcroController extends \yii\web\Controller
         ]);
 
         if (Yii::$app->request->isAjax) {
+			
             return $this->renderAjax('index', [
                 'dataProvider' => $dataProvider,
                 'lab_id' => $labId,
