@@ -7,7 +7,7 @@ use yii\web\Controller;
 //use common\models\lab\Sample;
 //use common\models\lab\SampleSearch;
 //use common\models\lab\Request;
-use frontend\modules\referrals\models\Referralextend;
+use common\models\referral\Referralextend;
 use common\models\referral\Lab;
 use common\models\referral\Referral;
 use common\models\referral\Agency;
