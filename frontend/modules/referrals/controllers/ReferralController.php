@@ -156,9 +156,9 @@ class ReferralController extends Controller
                 $analyses = $referralDetails['analysis_data'];
                 $customer = $referralDetails['customer_data'];
                 //set third parameter to 1 for attachment type deposit slip //this one returns false temporarily
-                $deposit = json_decode($refcomponent->getAttachment($referralId,Yii::$app->user->identity->profile->rstl_id,1),true);
+                $deposit = $refcomponent->getAttachment($referralId,Yii::$app->user->identity->profile->rstl_id,1);
                 //set third parameter to 2 for attachment type or //this one returns false temporarily
-                $or = json_decode($refcomponent->getAttachment($referralId,Yii::$app->user->identity->profile->rstl_id,2),true);
+                $or = $refcomponent->getAttachment($referralId,Yii::$app->user->identity->profile->rstl_id,2);
                 $referred_agency = $refcomponent->getReferredAgency($referralId,Yii::$app->user->identity->profile->rstl_id);
 
                 $receiving_agency = !empty($referred_agency['receiving_agency']) && $referred_agency > 0 ? $referred_agency['receiving_agency']['name'] : null;

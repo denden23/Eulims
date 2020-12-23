@@ -96,6 +96,8 @@ class PstcComponent extends Component {
             'user_id' => $data['user_id'],
             'submitted' =>$data['submitted'],
             'received' => $data['received'],
+            'pstc_id' => $data['pstcid'],
+            'rstl_id' => $data['rstl_id']
         ];
         $curl = new curl\Curl();
         $curl->setRequestBody(json_encode($params));
@@ -367,6 +369,7 @@ class PstcComponent extends Component {
         $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
         return $data = $curl->post($this->source."syncmethod");
     }
+    
 
 
     ///////////////////////////////////////////////////////////////
@@ -383,6 +386,32 @@ class PstcComponent extends Component {
         $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
 
         return $data = $curl->post($this->source."updatepstc");
+    }
+
+    function getPstc($agency)
+    {
+   
+        $curl = new curl\Curl();
+        $curl->setOption(CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $curl->setOption(CURLOPT_CONNECTTIMEOUT, 120);
+        $curl->setOption(CURLOPT_TIMEOUT, 120);
+        $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
+        $lists = $curl->get($this->source."pstclist?agency=".$agency);
+
+        return $lists;
+    }
+
+    function getCustomer($agency)
+    {
+   
+        $curl = new curl\Curl();
+        $curl->setOption(CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $curl->setOption(CURLOPT_CONNECTTIMEOUT, 120);
+        $curl->setOption(CURLOPT_TIMEOUT, 120);
+        $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
+        $lists = $curl->get($this->source."customerlist?agency=".$agency);
+
+        return $lists;
     }
 
 }

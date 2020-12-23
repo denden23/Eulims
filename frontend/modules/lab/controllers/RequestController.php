@@ -508,7 +508,7 @@ class RequestController extends Controller
 
 
         //update ref in pstc table
-        if($Req->request_type_id == 3){ // IF PSTC REQUEST
+        if($Req->pstc_id != 0){ // IF PSTC REQUEST
             $testarray = [
                 'id' => $Req->pstc_id,
                 'reference' => $ReferenceNumber,

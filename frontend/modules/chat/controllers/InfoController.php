@@ -181,12 +181,13 @@ class InfoController extends Controller
         }
     }
 	
-	public function Settoken($token,$userid)
+	public function Settoken($token,$userid,$pstcid)
     {
 		$session = Yii::$app->session;
 		
 		$session->set('usertoken', $token);
 		$session->set('userid', $userid);
+		$session->set('pstcid', $pstcid);
 		//return;
 	}	
     /*public function beforeAction($action) 
@@ -263,7 +264,8 @@ class InfoController extends Controller
 				if($res == 'true'){
 					$token=$decode['token'];
 					$userid=$decode['userid'];
-					$this->Settoken($token,$userid);
+					$pstcid=$decode['pstcid'];
+					$this->Settoken($token,$userid,$pstcid);
 					 Yii::$app->session->setFlash('success', 'Successfully logged in!');
 				} else{
 					 Yii::$app->session->setFlash('error', 'Login failed!');
@@ -282,6 +284,7 @@ class InfoController extends Controller
 		if(isset($_SESSION['usertoken'])){
 			$token=$_SESSION['usertoken'];
 			$userid= $_SESSION['userid'];
+			$pstcid= $_SESSION['pstcid'];
 			
 			$my_var = \Yii::$app->request->post();
 		
@@ -317,6 +320,7 @@ class InfoController extends Controller
 			
 			$token=$_SESSION['usertoken'];
 			$userid= $_SESSION['userid'];
+			$pstcid= $_SESSION['pstcid'];
 			
 			$my_var = \Yii::$app->request->post();
 		

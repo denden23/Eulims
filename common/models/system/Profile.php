@@ -105,6 +105,7 @@ class Profile extends \yii\db\ActiveRecord
             'contact_numbers' => 'Contact #',
             'image_url'=>'Image',
             'avatar'=>'Avatar',
+            'pstc_id'=>'Pstc'
         ];
     }
    

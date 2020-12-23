@@ -22,6 +22,7 @@ class Signup extends Model
     public $middleinitial;
     public $lab_id;
     public $rstl_id;
+    public $pstc_id;
     /**
      * @inheritdoc
      */
@@ -44,11 +45,12 @@ class Signup extends Model
             ['designation', 'required','message'=>'Designation is required!'],
             ['rstl_id', 'required','message'=>'RSTL is required!'],
             ['lab_id', 'required','message'=>'Laboratory is required!'],
-            [['rstl_id','lab_id'], 'integer'],
+            ['pstc_id', 'integer','message'=>'Pstc is optional'],
+            [['rstl_id','lab_id','pstc_id'], 'integer'],
             
             [['password','verifypassword'], 'required'],
             [['password', 'verifypassword'], 'string', 'min' => 6],
-            ['verifypassword', 'compare','message'=>'Password is not verified!', 'compareAttribute'=>'password'],  
+            ['verifypassword', 'compare','message'=>'Password is not verified!', 'compareAttribute'=>'password']
         ];
     }
     /**
@@ -61,7 +63,8 @@ class Signup extends Model
             'verifypassword'=>'Verify Password',
             'middleinitial'=>'Middle Name',
             'rstl_id'=>'RSTL',
-            'lab_id'=>'Laboratory'
+            'lab_id'=>'Laboratory',
+            'pstc_id'=>'PSTC'
         ];
     }
     /**
@@ -88,6 +91,7 @@ class Signup extends Model
                     $Profile->designation= $this->designation;
                     $Profile->lab_id=$this->lab_id;
                     $Profile->rstl_id= $this->rstl_id;
+                    $Profile->pstc_id= $this->pstc_id;
                     if(trim($this->middleinitial)!=''){
                         $initial=strtoupper(substr($this->middleinitial, 0, 1)).". ";
                     }else{

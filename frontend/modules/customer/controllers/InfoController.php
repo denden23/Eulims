@@ -100,18 +100,19 @@ class InfoController extends Controller
             'industrytype_id' => $data->industrytype_id,
         ];
         try {
-            // $authorization = "Authorization: Bearer ".$token; 
+            $token= 'Authorization: Bearer '.$_SESSION['usertoken'];
             $apiUrl=$GLOBALS['newapi_url']."message/synccustomer";
+
             $curl = new curl\Curl();
             $curl->setRequestBody(json_encode($params));
-            $curl->setOption(CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            $curl->setOption(CURLOPT_HTTPHEADER, ['Content-Type: application/json' , $token]);
             $curl->setOption(CURLOPT_CONNECTTIMEOUT, 180);
             $curl->setOption(CURLOPT_TIMEOUT, 180);
             $curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
             $response = $curl->post($apiUrl);
 
 
-            var_dump($response); exit;
+            //  var_dump($response); exit;
             if($response==2){
                 //update the record's 
                 $data->sync_status = 2;
@@ -122,8 +123,10 @@ class InfoController extends Controller
                 //update the model with the customer code
                 $data->sync_status = 1;
                 $response = json_decode($response);
+                // var_dump($response); exit();
                 $data->customer_code=$response;
                 $data->save();
+                var_dump($data); exit();
                 //user record sync
                 echo "Customer Code Sync with ID: ".$response;
              }

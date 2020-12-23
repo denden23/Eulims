@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'customer_id',
                 'format' => 'raw',
                 'value' => function($data){ 
-                    return !empty($data['customer']) ? $data['customer']['customer_name'] : null;
+                    return $data['customer'];
                 },
                 'filterType' => GridView::FILTER_SELECT2,
                 //'filter' => $customers,

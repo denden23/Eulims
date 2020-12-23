@@ -13,6 +13,7 @@ use common\models\lab\Lab;
 $this->title = Yii::t('rbac-admin', 'Signup');
 $this->params['breadcrumbs'][] = $this->title;
 $RstlList= ArrayHelper::map(Rstl::find()->all(),'rstl_id','name');
+// $pstcList = [10=>'zc',111=>'zdn'];//temp
 $LabList= ArrayHelper::map(lab::find()->all(),'lab_id','labname');
 ?>
 <div class="site-signup">
@@ -79,6 +80,19 @@ $LabList= ArrayHelper::map(lab::find()->all(),'lab_id','labname');
                 ],
             ]); ?>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+            <?= $form->field($model, 'pstc_id')->widget(Select2::classname(), [
+                'data' => $pstcs,
+                'language' => 'en',
+                'options' => ['placeholder' => 'Select PSTC'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]); ?>
+            </div>
+            
         </div>
     </fieldset>
     <div class="form-group" style="float: right">

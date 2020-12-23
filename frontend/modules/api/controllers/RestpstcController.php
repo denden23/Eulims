@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\db\ActiveQuery;
+use common\models\referral\Pstc;
 use common\models\referral\Pstcrequest;
 use common\models\referral\Pstcsample;
 use common\models\referral\Lab;
@@ -18,6 +19,7 @@ use common\models\referral\Testnamemethod;
 use common\models\referral\Sampletype;
 use common\models\referral\Pstcanalysis;
 use common\models\referral\Methodreference;
+use common\models\referral\Customer;
 use yii\helpers\ArrayHelper;
 
 class RestpstcController extends \yii\rest\Controller
@@ -53,7 +55,7 @@ class RestpstcController extends \yii\rest\Controller
 		// re-add authentication filter
 		$behaviors['authenticator'] = $auth;
 		// avoid authentication on CORS-pre-flight requests (HTTP OPTIONS method)
-		$behaviors['authenticator']['except'] = ['request','requestview'];
+		$behaviors['authenticator']['except'] = ['request','requestview','listlab','pstclist', 'customerlist'];
 
 		return $behaviors;
 	}
@@ -66,14 +68,37 @@ class RestpstcController extends \yii\rest\Controller
     {
         $request = Yii::$app->request;
         $rstl_id = (int) $request->get('rstl_id');
-
+        $dataSet = [];
         if($rstl_id) {
-            $data = Pstcrequest::find()->joinWith('customer')->where(['tbl_pstcrequest.rstl_id'=>$rstl_id])
+            
+            $datas = Pstcrequest::find()->where(['tbl_pstcrequest.rstl_id'=>$rstl_id])
                 ->orderBy('created_at DESC')
                 ->asArray()
                 ->all();
+
+                foreach($datas as $data){
+
+                    $customer = Customer::find()->where(['local_customer_id' =>  $data['customer_id']])->andWhere(['rstl_id' => $rstl_id])->one();
+
+                    $dataSet[] = [
+                        'pstc_request_id'  => $data['pstc_request_id'],
+                        'rstl_id'  => $data['pstc_request_id'],
+                        'pstc_id'  => $data['pstc_request_id'],
+                        'request_ref_num'  => $data['pstc_request_id'],
+                        'submitted_by'  => $data['submitted_by'],
+                        'received_by'  => $data['received_by'],
+                        'user_id'  => $data['user_id'],
+                        'status_id'  => $data['status_id'],
+                        'accepted'  => $data['accepted'],
+                        'duedate' => $data['duedate'],
+                        'created_at' => $data['created_at'],
+                        'updated_at' => $data['updated_at'],
+                        'customer' => $customer['customer_name']
+                    ];
+                }
+
+            return $dataSet;
             
-            return $data;
         }else{
             throw new \yii\web\HttpException(400, 'Please specify RSTL ID. :)');
         }
@@ -108,8 +133,8 @@ class RestpstcController extends \yii\rest\Controller
     {
         $request = Yii::$app->request;
         $data = ($request->isPut) ? Pstcrequest::find()->where(['id' => $id])->one() : new Pstcrequest;
-        $data->rstl_id = 11;
-        $data->pstc_id = 112;
+        $data->rstl_id = (int) Yii::$app->request->post('rstl_id');
+        $data->pstc_id = (int) Yii::$app->request->post('pstc_id');
         $data->customer_id = (int) Yii::$app->request->post('customer_id');
         $data->submitted_by=  ucwords(strtolower(Yii::$app->request->post('submitted')));
         $data->received_by = ucwords(strtolower(Yii::$app->request->post('received')));
@@ -153,6 +178,9 @@ class RestpstcController extends \yii\rest\Controller
                 }
                 $discount = $subtotal * (0/100);
                 $total = $subtotal - $discount;
+
+                $customer_id = $request->customer_id;
+                $customer = Customer::find()->where(['local_customer_id' =>  $customer_id])->andWhere(['rstl_id' => $rstl_id])->one();
             }
             
             return [
@@ -161,7 +189,7 @@ class RestpstcController extends \yii\rest\Controller
                 'analysis_data'=>$analysis,
                 'respond_data'=>$request->respond,
                 'pstc_data'=>$request->pstc,
-                'customer_data'=>$request->customer,
+                'customer_data'=>$customer,
                 'attachment_data' => ($request->attachment == null) ? $attachment = [] : $request->attachment,
                 'subtotal' => $subtotal,
                 'discount' => $discount,
@@ -319,6 +347,26 @@ class RestpstcController extends \yii\rest\Controller
         return $test;
     }
 
+    public function actionPstclist($agency){
+
+        $pstcs = ArrayHelper::map(Pstc::find()->where(['agency_id' => $agency])->all(), 'pstc_id','name');
+        return $pstcs;
+        
+    }
+
+    public function actionCustomerlist($agency){
+
+        // $pstcs = ArrayHelper::map(Pstc::find()->where(['rsl_id' => $agency])->all(), 'pstc_id','name');
+        // return $pstcs;
+
+        $customer = ArrayHelper::map(Customer::find()->where('rstl_id =:rstlId',[':rstlId'=>$agency])->all(), 'local_customer_id',
+            function($customer, $defaultValue) {
+                return $customer->customer_name;
+        });
+
+        return $customer;  
+    }
+
     public function actionListlab() // GET LISTS OF LAB, SAMPLE TYPE AND TESTNAME IN THE MAIN SERVER
     {
         // $testnamelist = ArrayHelper::map(Customer::find()->all(), 'testname_id', 
@@ -341,15 +389,16 @@ class RestpstcController extends \yii\rest\Controller
                 return $testnamelist->test_name;
         });
 
-        // $sampletemplates = ArrayHelper::map(Testname::find()->all(), 'testname_id', 
-        //     function($testnamelist, $defaultValue) {
-        //         return $testnamelist->test_name;
-        // });
+        $customers = ArrayHelper::map(Customer::find()->all(), 'customer_id', 
+            function($customerlist, $defaultValue) {
+                return $customerlist->customer_name;
+        });
         
         $lists = array(
             'labs' => $labs,
             'sampletypes' => $sampletypes,
             'testnamelist' => $testnamelist,
+            'customers' => $customers
             // 'sampletemplates' => $sampletemplates
         );
 

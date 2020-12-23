@@ -114,7 +114,8 @@ class MessageController extends \yii\rest\Controller
                                     'firstName'=>$profile->firstname,
                                     'middleInitial' => $profile->middleinitial,
                                     'lastname' => $profile->lastname]),
-						'userid'=> $profile->user_id,	
+						'userid'=> $profile->user_id,
+						'pstcid'=> $profile->pstc_id,	
 						'success' => true
                     ]);
                 } else {
@@ -453,9 +454,6 @@ class MessageController extends \yii\rest\Controller
                     $newmodel->customer_type_id = Yii::$app->request->post('customer_type_id');
                     $newmodel->business_nature_id = Yii::$app->request->post('business_nature_id');
                     $newmodel->industrytype_id = Yii::$app->request->post('industrytype_id');
-                    $newmodel->is_sync_up = Yii::$app->request->post('is_sync_up');
-                    $newmodel->is_updated = Yii::$app->request->post('is_updated');
-                    $newmodel->is_deleted = Yii::$app->request->post('is_deleted');
                     if($newmodel->save(false)){
 						return $this->asJson(
 							$newmodel

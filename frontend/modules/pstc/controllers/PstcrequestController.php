@@ -58,6 +58,7 @@ class PstcrequestController extends Controller
     public function actionIndex()
     {
         $rstlId = (int) Yii::$app->user->identity->profile->rstl_id;
+        $pstcId = $_SESSION['pstcid'];
         $pstcComponent = new PstcComponent();
         $referrals = json_decode($pstcComponent->getAll($rstlId),true);
         
@@ -88,7 +89,7 @@ class PstcrequestController extends Controller
         {
             $function = new PstcComponent();
             $details = json_decode($function->getViewRequest($requestId,$rstlId,$pstcId),true);
-           
+
             $request = $details['request_data'];
             $samples = $details['sample_data'];
             $analysis = $details['analysis_data'];
@@ -141,7 +142,6 @@ class PstcrequestController extends Controller
     {
         $model = new Pstcrequest;
         $rstl_id = (int) Yii::$app->user->identity->profile->rstl_id;
-       
         $mi = !empty(Yii::$app->user->identity->profile->middleinitial) ? " ".substr(Yii::$app->user->identity->profile->middleinitial, 0, 1).". " : " ";
         $user_fullname = Yii::$app->user->identity->profile->firstname.$mi.Yii::$app->user->identity->profile->lastname;
 
@@ -163,6 +163,7 @@ class PstcrequestController extends Controller
                 'user_id' => (int) Yii::$app->user->identity->profile->user_id,
                 'submitted' => $post['submitted_by'],
                 'received' => $user_fullname,
+                'pstcid' => $_SESSION['pstcid']
             ];
 
             $function = new PstcComponent();
@@ -298,7 +299,7 @@ class PstcrequestController extends Controller
     {
         $rstlId = (int) Yii::$app->user->identity->profile->rstl_id;
         $request_id = (int) Yii::$app->request->post('request_id');
-        $pstc_id = 112;
+        $pstc_id = $_SESSION['pstcid'];
         
         $function = new PstcComponent();
         $pstc = json_decode($function->getViewRequest($request_id,$rstlId,$pstc_id),true);
@@ -317,10 +318,9 @@ class PstcrequestController extends Controller
         $model->total = $post['lab_id'];
         $model->conforme = $post['conforme'];
         $model->receivedBy= $post['receivedBy'];
-        $model->request_type_id = 3;
+        $model->request_type_id = $post['request_type_id'];
         $model->report_due = $post['report_due'];
         $model->pstc_id = $pstc['request_data']['pstc_request_id'];
-       
         if($model->save(false))
         {
             foreach($pstc['sample_data'] as $sampol) 
@@ -375,7 +375,7 @@ class PstcrequestController extends Controller
         
         $rstlId = (int) Yii::$app->user->identity->profile->rstl_id;
         $requestId = (int) Yii::$app->request->get('request_id');
-        $pstcId = (int) Yii::$app->request->get('pstc_id');
+        $pstcId = $_SESSION['pstcid'];
         $function = new PstcComponent();
 
         if($rstlId > 0 && $pstcId > 0 && $requestId > 0) {
@@ -760,10 +760,12 @@ class PstcrequestController extends Controller
 
     protected function listCustomers($rstlId)
     {
-        $customer = ArrayHelper::map(Customer::find()->where('rstl_id =:rstlId',[':rstlId'=>$rstlId])->all(), 'customer_id',
-            function($customer, $defaultValue) {
-                return $customer->customer_name;
-        });
+        $function = new PstcComponent();
+        $customer = json_decode($function->getcustomer($rstlId),true);
+        // $customer = ArrayHelper::map(Customer::find()->where('rstl_id =:rstlId',[':rstlId'=>$rstlId])->all(), 'customer_id',
+        //     function($customer, $defaultValue) {
+        //         return $customer->customer_name;
+        // });
         return $customer;
     }
 
@@ -850,7 +852,7 @@ class PstcrequestController extends Controller
 
                      $analysis->pstc_sample_id = $sample_id;
                      $analysis->rstl_id = $GLOBALS['rstl_id'];
-                     $analysis->pstc_id = 113;
+                     $analysis->pstc_id = $_SESSION['pstc_id'];
                      $analysis->testname_id = 0;
                      $analysis->testname = $modelpackage->name;
                      $analysis->package_id = $modelpackage->id;
@@ -882,7 +884,7 @@ class PstcrequestController extends Controller
                         
                         $analysis_package->pstc_sample_id = $sample_id;
                         $analysis_package->rstl_id = $GLOBALS['rstl_id'];
-                        $analysis_package->pstc_id = 113;
+                        $analysis_package->pstc_id = $_SESSION['pstcid'];
                         $analysis_package->testname_id = $t_id;
                         $analysis_package->testname = $modeltest->testName;
                         $analysis_package->method_id = $methodreference->method_reference_id;

@@ -20,6 +20,7 @@ use yii\base\UserException;
 use yii\mail\BaseMailer;
 use yii\helpers\Url;
 use common\modules\admin\components\Helper;
+use common\components\PstcComponent;
 
 /**
  * User controller
@@ -230,14 +231,21 @@ class UserController extends Controller
                 } 
             }
         }
+
+        $function = new PstcComponent();
+        $rstlId = (int) Yii::$app->user->identity->profile->rstl_id;
+        $lists = json_decode($function->getPstc($rstlId),true);
+
         if(\Yii::$app->request->isAjax){
             return $this->renderAjax('signup', [
                 'model' => $model,
+                'pstcs' => $lists,
                 'isModal'=>true
             ]);
         }else{
             return $this->render('signup', [
                 'model' => $model,
+                'pstcs' => $lists,
                 'isModal'=>false
             ]);
         }

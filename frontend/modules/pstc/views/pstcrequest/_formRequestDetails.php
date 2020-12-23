@@ -88,7 +88,7 @@ if(count($sampletype) > 0){
        <?php echo Html::hiddenInput('request_id', $_GET['request_id']); ?>
         <div class="col-md-6">
         <?= $form->field($model, 'request_type_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(RequestType::find()->where('request_type_id =:requestTypeId',[':requestTypeId'=>1])->all(),'request_type_id','request_type'),
+            'data' => ArrayHelper::map(RequestType::find()->all(),'request_type_id','request_type'),
             'language' => 'en',
             'options' => ['placeholder' => 'Select Request Type','disabled'=>$disabled],
             'pluginOptions' => [
@@ -494,36 +494,36 @@ if(count($sampletype) > 0){
                 ],*/
             ];
 
-            echo GridView::widget([
-                'id' => 'sample-grid',
-                //'dataProvider'=> $sampleDataProvider,
-                'dataProvider'=> $sampleDataProvider,
-                'pjax'=>true,
-                'pjaxSettings' => [
-                    'options' => [
-                        'enablePushState' => false,
-                    ]
-                ],
-                'responsive'=>true,
-                'striped'=>true,
-                'hover'=>true,
-                'panel' => [
-                    'heading'=>'<h3 class="panel-title">Samples</h3>',
-                    'type'=>'primary',
-                    //'before'=>null,
-                    'before' => 'List of samples that will be saved.',
-                    'after'=>false,
-                    'footer'=>false,
-                    //'before'=> Html::button('<i class="glyphicon glyphicon-plus"></i> Add Sample', ['value' => Url::to(['/pstc/pstcsample/create','request_id'=>$request['pstc_request_id']]),'title'=>'Add Sample', 'onclick'=>'addSample(this.value,this.title)', 'class' => 'btn btn-success','id' => 'modalBtn']),
-                ],
-                'columns' => $sampleGridColumns,
-                'toolbar' => [
-                    // 'content'=> Html::a('<i class="glyphicon glyphicon-repeat"></i> Refresh Grid', [Url::to(['/pstc/pstcrequest/view','request_id'=>$request['pstc_request_id']])], [
-                    //             'class' => 'btn btn-default', 
-                    //             'title' => 'Refresh Grid'
-                    //         ]),
-                ],
-            ]);
+            // echo GridView::widget([
+            //     'id' => 'sample-grid',
+            //     //'dataProvider'=> $sampleDataProvider,
+            //     'dataProvider'=> $sampleDataProvider,
+            //     'pjax'=>true,
+            //     'pjaxSettings' => [
+            //         'options' => [
+            //             'enablePushState' => false,
+            //         ]
+            //     ],
+            //     'responsive'=>true,
+            //     'striped'=>true,
+            //     'hover'=>true,
+            //     'panel' => [
+            //         'heading'=>'<h3 class="panel-title">Samples</h3>',
+            //         'type'=>'primary',
+            //         //'before'=>null,
+            //         'before' => 'List of samples that will be saved.',
+            //         'after'=>false,
+            //         'footer'=>false,
+            //         //'before'=> Html::button('<i class="glyphicon glyphicon-plus"></i> Add Sample', ['value' => Url::to(['/pstc/pstcsample/create','request_id'=>$request['pstc_request_id']]),'title'=>'Add Sample', 'onclick'=>'addSample(this.value,this.title)', 'class' => 'btn btn-success','id' => 'modalBtn']),
+            //     ],
+            //     'columns' => $sampleGridColumns,
+            //     'toolbar' => [
+            //         // 'content'=> Html::a('<i class="glyphicon glyphicon-repeat"></i> Refresh Grid', [Url::to(['/pstc/pstcrequest/view','request_id'=>$request['pstc_request_id']])], [
+            //         //             'class' => 'btn btn-default', 
+            //         //             'title' => 'Refresh Grid'
+            //         //         ]),
+            //     ],
+            // ]);
         ?>
         </div>
     </div>
