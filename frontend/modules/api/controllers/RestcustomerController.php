@@ -372,7 +372,7 @@ class RestcustomerController extends \yii\rest\Controller
         if ($accountcustom){
             if($customer){
             //check if the customer has an account already
-/*                $account = Customeraccount::find()->where(['customer_id'=>$customer->customer_id])->one();
+                $account = Customeraccount::find()->where(['customer_id'=>$customer->customer_id])->one();
                 if($account){
                     //update the verify code
                     $account->verifycode = $code;
@@ -386,13 +386,7 @@ class RestcustomerController extends \yii\rest\Controller
                     $new->generateAuthKey();
                     $new->verifycode = $code;
                     $new->save();
-                }*/
-                    $new = new Customeraccount;
-                    $new->customer_id=$customer->customer_id;
-                    $new->setPassword('12345');
-                    $new->generateAuthKey();
-                    $new->verifycode = $code;
-                    $new->save();
+                }
             //contruct the html content to be mailed to the customer
             $content ="
             <h1>Good day! $customer->customer_name</h1>
